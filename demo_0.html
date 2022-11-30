@@ -5,8 +5,58 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script src="library/vue_v2.6.9.js"></script>
+  <!-- <script src="./library/vue.runtime_v2.5.9.js"></script> -->
 </head>
 <body>
-  
+  <div id="app">
+    xxx
+    <div>{{message}}</div>
+    <div>{{count}}</div>
+    <button @click="clickAdd">click</button>
+  </div>
+  <script>
+    debugger
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue!',
+        count: 0,
+      },
+      methods: {
+        clickAdd () {
+          this.count ++
+        }
+      },
+      beforeCreate() {
+        console.log('=== beforeCreate ===')
+      },
+      created() {
+        console.log('=== created ===')
+      },
+      beforeMount() {
+        console.log('=== beforeMount ===')
+      },
+      mounted () {
+        console.log('=== mounted ===')
+      },
+      beforeUpdate() {
+        console.log('=== beforeUpdate ===')
+      },
+      updated() {
+        console.log('=== updated ===')
+      },
+      beforeDestroy() {
+        console.log('=== beforeDestroy ===')
+      },
+      destroyed() {
+        console.log('=== destroyed ===')
+      },
+      errorCaptured () {
+        console.log('=== errorCaptured ===')
+      }
+    });
+    console.log('vue--instance', app)
+  </script>
 </body>
 </html>

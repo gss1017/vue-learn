@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="library/vue_v2.6.9.js"></script>
+  <!-- <script src="./library/vue.runtime_v2.5.9.js"></script> -->
+</head>
+<body>
+  <div id="app">
+    test
+  </div>
+  <script>
+    debugger
+    const ob = Vue.observable({
+      a: 1,
+      b: 2,
+    })
+    console.log('ob--', ob, ob.a)
+  </script>
+</body>
+</html>
