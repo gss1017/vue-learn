@@ -160,6 +160,7 @@
 
   /**
    * Create a cached version of a pure function.
+   * 对所有处理函数处理的结果做缓存
    */
   function cached (fn) {
     var cache = Object.create(null);
@@ -171,6 +172,7 @@
 
   /**
    * Camelize a hyphen-delimited string.
+   * -a-a -> AA 符号转换字母
    */
   var camelizeRE = /-(\w)/g;
   var camelize = cached(function (str) {
@@ -238,6 +240,7 @@
 
   /**
    * Mix properties into target object.
+   * 合并对象 Object.assign
    */
   function extend (to, _from) {
     for (var key in _from) {
@@ -1313,6 +1316,8 @@
    * When a vm is present (instance creation), we need to do
    * a three-way merge between constructor options, instance
    * options and parent options.
+   * ASSET_TYPES 中的字段 做继承处理
+   * childVal 继承 parentVal
    */
   function mergeAssets (
     parentVal,
@@ -1428,6 +1433,8 @@
   /**
    * Ensure all props option syntax are normalized into the
    * Object-based format.
+   * 检测组件的props中的内容是否符合规范
+   * 对props统一格式重新包装
    */
   function normalizeProps (options, vm) {
     var props = options.props;
@@ -1448,6 +1455,7 @@
     } else if (isPlainObject(props)) {
       for (var key in props) {
         val = props[key];
+        // props 特殊key （-a —> A）处理
         name = camelize(key);
         res[name] = isPlainObject(val)
           ? val
@@ -1465,6 +1473,8 @@
 
   /**
    * Normalize all injections into Object-based format
+   * inject 参数类型检测
+   * 对应参数进行统一包装 -> {from: 'key'} 从哪里注入
    */
   function normalizeInject (options, vm) {
     var inject = options.inject;
@@ -1492,6 +1502,7 @@
 
   /**
    * Normalize raw function directives into object format.
+   * 将函数类型的指令统一包装成对象 {bind: dirsFunc, update: dirsFunc}
    */
   function normalizeDirectives (options) {
     var dirs = options.directives;
@@ -1525,6 +1536,8 @@
     vm
   ) {
     {
+      // 检测当前组件下的自定义组件名称是否符合vue组件命名规范
+      // 是否和html原生组件命名重复
       checkComponents(child);
     }
 
@@ -1540,6 +1553,7 @@
     // but only if it is a raw options object that isn't
     // the result of another mergeOptions call.
     // Only merged options has the _base property.
+    // 是否是已经处理过的options
     if (!child._base) {
       if (child.extends) {
         parent = mergeOptions(parent, child.extends, vm);
@@ -5016,6 +5030,8 @@
     }
   }
 
+  // 获取根组件构造函数上options (vue全局的options)
+  // Ctor 构造当前组件的构造函数
   function resolveConstructorOptions (Ctor) {
     var options = Ctor.options;
     if (Ctor.super) {
@@ -5026,13 +5042,16 @@
         // need to resolve new options.
         Ctor.superOptions = superOptions;
         // check if there are any late-modified/attached options (#4976)
+        // 当前组件上绑定的options是否有差异 基于Ctor.sealedOptions来比较
         var modifiedOptions = resolveModifiedOptions(Ctor);
         // update base extend options
         if (modifiedOptions) {
+          // 将差异的对象合并到 Ctor.extendOptions
           extend(Ctor.extendOptions, modifiedOptions);
         }
         options = Ctor.options = mergeOptions(superOptions, Ctor.extendOptions);
         if (options.name) {
+          // 缓存当前组件的构造函数
           options.components[options.name] = Ctor;
         }
       }
